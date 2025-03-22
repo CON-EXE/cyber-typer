@@ -1,13 +1,11 @@
 'use strict';
 
-const { log } = console;
-
-let startTime = 10;
+let startTime = 120;
 let time = startTime;
 let score = 0;
 let word = '';
 let shuffledWords = [];
-let characters = [];
+let timer;
 
 const words = [
     'dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'building', 'weather',
@@ -39,7 +37,10 @@ const words = [
     'squeeze', 'forever', 'stadium', 'gourmet', 'flower', 'bravery', 'playful',
     'captain', 'vibrant', 'damage', 'outlet', 'general', 'batman', 'enigma',
     'storm', 'universe', 'engine', 'mistake', 'hurricane', 'jasper'
-]; // Holy shit
+];
+
+const bgm = new Audio('./assets/media/bgm.mp3');
+const scoreWord = new Audio('./assets/media/get-word.mp3');
 
 const startBtn = document.querySelector('.start');
 const resetBtn = document.querySelector('.reset');
@@ -48,48 +49,17 @@ const wordDisplay = document.querySelector('.word');
 const timeDisplay = document.querySelector('.time');
 const scoreDisplay = document.querySelector('.score');
 
-class Char {
-    #char;
-    #index;
-
-    constructor(char, index) {
-        this.#char = char;
-        this.#index = index;
-    }
-
-    get char() {
-        return this.#char;
-    }
-
-    get index() {
-        return this.#index;
-    }
-}
-
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
 function getWord(array) {
-    characters = [];
-    let letters = array[0].split('');
-    for (let i = 0; i < letters.length; i++) {
-        let char = new Char(letters[i], i);
-        characters.push(char);
-        let letter = document.createElement('span');
-        letter.setAttribute('data-index', i);
-        letter.innerHTML += `${letters[i]}`;
-        wordDisplay.append(letter);
-        count++;
-    }
-}
-
-function compareLetter() {
-    let input = playerInput.value.split('');
-    for(let i = 0; i < playerInput.value.length; i++) {
-        if (input[i] === characters[i.char]) {
-            log('this works');
-        }
+    word = array[0];
+    // figured out this loop from AI
+    for (const letter of word) {
+        const span = document.createElement('span');
+        span.textContent = letter;
+        wordDisplay.appendChild(span);
     }
 }
 
@@ -106,34 +76,96 @@ function getNextWord() {
     getWord(shuffledWords);
 }
 
-function gameOver() {
-    playerInput.setAttribute('readonly');
+function getTimer() {
     time = startTime;
+    timeDisplay.innerText = `time: ${time}`;
+    clearInterval(timer);
+
+    timer = setInterval(() => {
+        if (time > 0) {
+            time--;
+            timeDisplay.innerText = `Time: ${time}`;
+        } else {
+            clearInterval(timer);
+            gameOver();
+        }
+    }, 1000);
+}
+
+function gameOver() {
+    bgm.pause();
+    wordDisplay.innerText = '';
+    playerInput.setAttribute('readonly', true);
+    playerInput.style.backgroundColor = "#e6000090";
+    playerInput.value = 'Game Over';
+    scoreDisplay.innerText = `Final Score: ${score}`;
 }
 
 startBtn.addEventListener('click', () => {
+    bgm.play();
+    getTimer();
     playerInput.removeAttribute('readonly');
     playerInput.focus();
+    startBtn.classList.add('hide');
+    resetBtn.classList.remove('hide');
 
     shuffledWords = shuffle(words);
-    word = getWord(shuffledWords);
-
-    timeDisplay.innerText = time;
-    setInterval(() => {
-        time = time - 1;
-        timeDisplay.innerText = time;
-        if (time === 0) {
-            gameOver();
-            clearInterval();
-        }
-    }, 1000);
+    getWord(shuffledWords);
 });
 
 // Learned how to use input using ai
 playerInput.addEventListener('input', () => {
+    const input = playerInput.value;
+    const spans = wordDisplay.querySelectorAll('span');
+    let matchingText = '';
+
+    // learned how to use using ai
+    for (let i = 0; i < word.length; i++) {
+        if (input[i] === word[i]) {
+            matchingText += word[i];
+            spans[i].classList.add('match');
+        } else {
+            spans[i].classList.remove('match');
+        }
+    }
+
+    // learned how to use using ai
+    if (!input.startsWith(matchingText)) {
+        playerInput.value = matchingText + input.slice(matchingText.length);
+    }
+
     if (playerInput.value === word) {
-        getNextWord();
+        scoreWord.play();
         updateScore();
-        log(characters[0].char);
+        setTimeout(() => {
+            getNextWord();
+        }, 300);
     }
 });
+
+// Mostly got this from ai
+playerInput.addEventListener('keydown', function (event) {
+    const cursorPos = playerInput.selectionStart; // Current cursor position
+    const matchingLength = playerInput.value.split('').reduce((count, char, i) => {
+        return char === word[i] ? count + 1 : count;
+    }, 0); 
+  
+    if (cursorPos <= matchingLength && (event.key === "Backspace" || event.key === "ArrowLeft")) {
+        event.preventDefault();
+    }
+});
+
+resetBtn.addEventListener('click', () => {
+    bgm.load();
+    bgm.play();
+    getTimer();
+    wordDisplay.innerText = '';
+    playerInput.style.backgroundColor = "rgba(0, 0, 0, 0.64)"
+    playerInput.value = '';
+    playerInput.removeAttribute('readonly');
+    playerInput.focus();
+    startBtn.classList.add('hide');
+    resetBtn.classList.remove('hide');
+    shuffledWords = shuffle(words);
+    getWord(shuffledWords);
+})
