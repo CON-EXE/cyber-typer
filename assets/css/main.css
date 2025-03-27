@@ -4,8 +4,6 @@
     width: 1000px;
     height: 80%;
     margin-inline: auto;
-    background: rgba(0, 0, 0, 0.117);
-    backdrop-filter: blur(5px) saturate(120%) ;
     border-radius: 10px;
 }
 
@@ -24,6 +22,7 @@ body {
     color: #fff;
     display: flex;
     justify-content: center;
+    backdrop-filter: blur(5px) saturate(120%);
     background: url(../media/background.jpg) center center / cover no-repeat;
 }
 
@@ -86,14 +85,14 @@ h2 {
 
 .word {
     text-align: center;
-    line-height: 100px;
+    line-height: 120px;
     position: absolute;
-    height: 100px;
-    width: 480px;
+    height: 120px;
+    width: 550px;
     top: 160px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 50px;
+    font-size: 60px;
     border-radius: 10px;
     border: 1px solid rgb(255 255 255 / 8%);
     background-color: #6dea6d6d;
@@ -108,13 +107,13 @@ h2 {
 }
 
 .time {
-    bottom: 375px;
+    bottom: 350px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .score {
-    bottom: 275px;
+    bottom: 250px;
     left: 50%;
     transform: translateX(-50%);
 }  

@@ -105,6 +105,7 @@ startBtn.addEventListener('click', () => {
     bgm.play();
     getTimer();
     playerInput.removeAttribute('readonly');
+    playerInput.removeAttribute('placeholder');
     playerInput.focus();
     startBtn.classList.add('hide');
     resetBtn.classList.remove('hide');
