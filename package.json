@@ -1,0 +1,23 @@
+{
+  "name": "connor-hall-final-project",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "dev": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CON-EXE/cyber-typer.git"
+  },
+  "keywords": [],
+  "author": "Connor Hall",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CON-EXE/cyber-typer/issues"
+  },
+  "homepage": "https://github.com/CON-EXE/cyber-typer#readme",
+  "description": "",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
