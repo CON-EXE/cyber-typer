@@ -9,7 +9,7 @@ let timer;
 
 import wordList from "./words.js";
 import * as utils from "./utils.js";
-import Score from "./Score.js";
+// import Score from "./Score.js";
 
 const bgm = new Audio('./assets/media/bgm.mp3');
 const scoreWord = new Audio('./assets/media/get-word.mp3');

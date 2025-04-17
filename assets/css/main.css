@@ -62,6 +62,10 @@ a {
     color: #fff;
 }
 
+a.restart {
+    right: 8%;
+}
+
 h2 {
     font-variant: tabular-nums;
 }
@@ -84,9 +88,8 @@ h2 {
 
 .time {
     position: absolute;
-    /* text-align: center; */
     font-size: 40px;
-    bottom: 350px;
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -94,10 +97,8 @@ h2 {
 .score {
     position: fixed;
     font-size: 30px;
-    bottom: 10%;
-    left: 10%
-    /* left: 50%;
-    transform: translateX(-50%); */
+    bottom: 6%;
+    left: 5%;
 }  
 
 input {
