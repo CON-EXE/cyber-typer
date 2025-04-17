@@ -9,17 +9,17 @@ let timer;
 
 import wordList from "./words.js";
 import * as utils from "./utils.js";
-// import Score from "./Score.js";
+import Score from "./Score.js";
 
 const bgm = new Audio('./assets/media/bgm.mp3');
 const scoreWord = new Audio('./assets/media/get-word.mp3');
 
-const startBtn = document.querySelector('.start');
-const resetBtn = document.querySelector('.reset');
-const playerInput = document.querySelector('.input');
-const wordDisplay = document.querySelector('.word');
-const timeDisplay = document.querySelector('.time');
-const scoreDisplay = document.querySelector('.score');
+const startBtn = utils.select('.start');
+const restartBtn = utils.select('.restart');
+const playerInput = utils.select('.input');
+const wordDisplay = utils.select('.word');
+const timeDisplay = utils.select('.time');
+const scoreDisplay = utils.select('.score');
 
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
@@ -27,7 +27,6 @@ function shuffle(array) {
 
 function getWord(array) {
     word = array[0];
-    // figured out this loop from AI
     for (const letter of word) {
         const span = document.createElement('span');
         span.textContent = letter;
@@ -73,21 +72,21 @@ function gameOver() {
     scoreDisplay.innerText = `Final Score: ${score}`;
 }
 
-startBtn.addEventListener('click', () => {
+utils.listen('click', startBtn, () => {
     bgm.play();
     getTimer();
     playerInput.removeAttribute('readonly');
     playerInput.removeAttribute('placeholder');
     playerInput.focus();
     startBtn.classList.add('hide');
-    resetBtn.classList.remove('hide');
+    restartBtn.classList.remove('hide');
 
     shuffledWords = shuffle(wordList);
     getWord(shuffledWords);
 });
 
 // Learned how to use input using ai
-playerInput.addEventListener('input', () => {
+utils.listen('input', playerInput, () => {
     const input = playerInput.value;
     const spans = wordDisplay.querySelectorAll('span');
     let matchingText = '';
@@ -117,7 +116,7 @@ playerInput.addEventListener('input', () => {
 });
 
 // Mostly got this from ai
-playerInput.addEventListener('keydown', function (event) {
+utils.listen('keydown', playerInput, function (event) {
     const cursorPos = playerInput.selectionStart; // Current cursor position
     const matchingLength = playerInput.value.split('').reduce((count, char, i) => {
         return char === word[i] ? count + 1 : count;
@@ -128,7 +127,7 @@ playerInput.addEventListener('keydown', function (event) {
     }
 });
 
-resetBtn.addEventListener('click', () => {
+utils.listen('click', restartBtn, () => {
     bgm.load();
     bgm.play();
     getTimer();
@@ -138,7 +137,7 @@ resetBtn.addEventListener('click', () => {
     playerInput.removeAttribute('readonly');
     playerInput.focus();
     startBtn.classList.add('hide');
-    resetBtn.classList.remove('hide');
+    restartBtn.classList.remove('hide');
     shuffledWords = shuffle(wordList);
     getWord(shuffledWords);
-})
+});

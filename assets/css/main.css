@@ -35,35 +35,15 @@ div {
     position: relative;
 }
 
-.title {
+h1.title {
+    font-size: 80px;
     font-family: "VT323", monospace;
-
-    h1 {
-        font-size: 80px;
-        text-align: center;
-        position: fixed;
-        top: 2%;
-        left: 2%;
-        pointer-events: none;
-    }
-    
-    .red {
-        top: 15px;
-        left: 15px;
-        color: rgb(255, 0, 0, 0.8);
-    }
-    
-    .green {
-        top: 20px;
-        left: 20px;
-        color: rgba(0, 255, 0, 0.8);
-    }
-    
-    .blue {
-        top: 25px;
-        left: 25px;
-        color: rgb(0, 0, 255, 0.8);
-    }
+    text-align: center;
+    position: fixed;
+    top: 2%;
+    left: 2%;
+    pointer-events: none;
+    text-shadow: 4px 4px  #ff0000, 8px 8px  #00ff00, 12px 12px  #0000ff;
 }
 
 .match {
@@ -75,7 +55,7 @@ a {
     font-size: 80px;
     position: fixed;
     bottom: 10%;
-    right: 2%;
+    right: 5%;
     height: 50px;
     width: 150px;
     border-radius: 10px;
@@ -102,23 +82,22 @@ h2 {
 
 }
 
-.time, .score { /*Couldn't figure out how to keep these from moving*/
-    position: absolute;
-    font-size: 40px;
-    font-variant: tabular-nums;
-    text-align: left;
-}
-
 .time {
+    position: absolute;
+    /* text-align: center; */
+    font-size: 40px;
     bottom: 350px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .score {
-    bottom: 250px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    font-size: 30px;
+    bottom: 10%;
+    left: 10%
+    /* left: 50%;
+    transform: translateX(-50%); */
 }  
 
 input {
