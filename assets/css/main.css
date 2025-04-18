@@ -16,6 +16,10 @@
     display: none;
 }
 
+.fixed {
+    position: fixed;
+}
+
 body {
     font-family: "Share Tech Mono", monospace;
     background: #181725;
@@ -39,7 +43,6 @@ h1.title {
     font-size: 80px;
     font-family: "VT323", monospace;
     text-align: center;
-    position: fixed;
     top: 2%;
     left: 2%;
     pointer-events: none;
@@ -50,10 +53,13 @@ h1.title {
     color: #32cd32
 }
 
+.incorrect {
+    color: #e60000;
+}
+
 a {
     font-family: "VT323", monospace;
     font-size: 80px;
-    position: fixed;
     bottom: 10%;
     right: 5%;
     height: 50px;
@@ -64,6 +70,12 @@ a {
 
 a.restart {
     right: 8%;
+}
+
+a.highscores {
+    font-size: 60px;
+    right: 10%;
+    top: 6%;
 }
 
 h2 {
@@ -83,7 +95,6 @@ h2 {
     border-radius: 10px;
     border: 1px solid rgb(255 255 255 / 8%);
     background-color: #6dea6d6d;
-
 }
 
 .time {
@@ -95,8 +106,6 @@ h2 {
 }
 
 .score {
-    position: fixed;
-    font-size: 30px;
     bottom: 6%;
     left: 5%;
 }  
@@ -116,4 +125,9 @@ input {
     border: 1px solid rgb(255 255 255 / 8%);
     background-color: rgba(0, 0, 0, 0.64);
     color: #fff;
+}
+
+dialog {
+    height: 100svh;
+    width: 200px;
 }

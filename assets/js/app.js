@@ -1,18 +1,23 @@
 'use strict';
 
+const { log } = console;
+
 let startTime = 120;
 let time = startTime;
 let score = 0;
+let words = 0;
+let average = 0;
 let word = '';
 let shuffledWords = [];
 let timer;
 
 import wordList from "./words.js";
 import * as utils from "./utils.js";
-// import Score from "./Score.js";
+// import score from "./Score.js";
 
 const bgm = new Audio('./assets/media/bgm.mp3');
 const scoreWord = new Audio('./assets/media/get-word.mp3');
+const incorrect = new Audio('./assets/media/incorrect.mp3')
 
 const startBtn = utils.select('.start');
 const restartBtn = utils.select('.restart');
@@ -40,7 +45,6 @@ function updateScore() {
 }
 
 function getNextWord() {
-    word = '';
     playerInput.value = '';
     wordDisplay.innerText = '';
     shuffledWords.shift();
@@ -61,6 +65,11 @@ function getTimer() {
             gameOver();
         }
     }, 1000);
+}
+
+function getPercentage(score, words) {
+    let percentage = score / words;
+    return percentage;
 }
 
 function gameOver() {
@@ -106,12 +115,28 @@ utils.listen('input', playerInput, () => {
         playerInput.value = matchingText + input.slice(matchingText.length);
     }
 
+    for (let i = 0; i < input.length; i++) {
+        if(input[i] !== word[i]) {
+            spans[i].classList.add('incorrect');
+            playerInput.setAttribute('readonly', 'true');
+            incorrect.load();
+            incorrect.play();
+            words++;
+            setTimeout(() => {
+                playerInput.removeAttribute('readonly', 'true');
+                getNextWord();
+            }, 300);
+        }
+    }
+
     if (playerInput.value === word) {
+        scoreWord.load();
         scoreWord.play();
         updateScore();
         setTimeout(() => {
             getNextWord();
         }, 300);
+        words++;
     }
 });
 
@@ -131,6 +156,7 @@ utils.listen('click', restartBtn, () => {
     bgm.load();
     bgm.play();
     getTimer();
+    words = 0;
     wordDisplay.innerText = '';
     playerInput.style.backgroundColor = "rgba(0, 0, 0, 0.64)"
     playerInput.value = '';
