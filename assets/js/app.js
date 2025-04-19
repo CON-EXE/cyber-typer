@@ -2,18 +2,19 @@
 
 const { log } = console;
 
-let startTime = 120;
+let startTime = 10;
 let time = startTime;
 let score = 0;
 let words = 0;
-let average = 0;
+let percentage = 0;
 let word = '';
 let shuffledWords = [];
 let timer;
+let highScores = [];
 
 import wordList from "./words.js";
 import * as utils from "./utils.js";
-// import score from "./Score.js";
+import { Score } from "./Score.js";
 
 const bgm = new Audio('./assets/media/bgm.mp3');
 const scoreWord = new Audio('./assets/media/get-word.mp3');
@@ -69,6 +70,8 @@ function getTimer() {
 
 function getPercentage(score, words) {
     let percentage = score / words;
+    percentage = (percentage * 100).toFixed();
+    log(score, words, percentage);
     return percentage;
 }
 
@@ -79,6 +82,16 @@ function gameOver() {
     playerInput.style.backgroundColor = "#e6000090";
     playerInput.value = 'Game Over';
     scoreDisplay.innerText = `Final Score: ${score}`;
+    percentage = getPercentage(score, words); 
+    saveScore(score, percentage);
+    log('this works');
+    log(highScores);
+}
+
+function saveScore(score, percentage) {
+    log('save works');
+    const newScore = new Score(score, percentage);
+    highScores.push(newScore);
 }
 
 utils.listen('click', startBtn, () => {
@@ -115,6 +128,7 @@ utils.listen('input', playerInput, () => {
         playerInput.value = matchingText + input.slice(matchingText.length);
     }
 
+    // If player makes a mistake
     for (let i = 0; i < input.length; i++) {
         if(input[i] !== word[i]) {
             spans[i].classList.add('incorrect');
@@ -129,11 +143,14 @@ utils.listen('input', playerInput, () => {
         }
     }
 
+    // If player completes a word
     if (playerInput.value === word) {
         scoreWord.load();
         scoreWord.play();
+        playerInput.setAttribute('readonly', 'true');
         updateScore();
         setTimeout(() => {
+            playerInput.removeAttribute('readonly', 'true');
             getNextWord();
         }, 300);
         words++;
@@ -157,13 +174,12 @@ utils.listen('click', restartBtn, () => {
     bgm.play();
     getTimer();
     words = 0;
+    score = 0;
     wordDisplay.innerText = '';
     playerInput.style.backgroundColor = "rgba(0, 0, 0, 0.64)"
     playerInput.value = '';
     playerInput.removeAttribute('readonly');
     playerInput.focus();
-    startBtn.classList.add('hide');
-    restartBtn.classList.remove('hide');
     shuffledWords = shuffle(wordList);
     getWord(shuffledWords);
 });
