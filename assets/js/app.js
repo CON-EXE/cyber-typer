@@ -18,7 +18,7 @@ import { Score } from "./Score.js";
 
 const bgm = new Audio('./assets/media/bgm.mp3');
 const scoreWord = new Audio('./assets/media/get-word.mp3');
-const incorrect = new Audio('./assets/media/incorrect.mp3')
+const incorrect = new Audio('./assets/media/incorrect.mp3');
 
 const startBtn = utils.select('.start');
 const restartBtn = utils.select('.restart');
@@ -28,6 +28,7 @@ const wordDisplay = utils.select('.word');
 const timeDisplay = utils.select('.time');
 const scoreDisplay = utils.select('.score');
 const highscoreDialog = utils.select('dialog');
+const leaderboard = utils.select('.leaderboard');
 const close = utils.select('.close-dialog');
 
 function shuffle(array) {
@@ -79,8 +80,14 @@ function getPercentage(score, words) {
 
 function gameOver() {
     bgm.pause();
+    highScoreBtn.classList.remove('noclick');
     wordDisplay.innerText = '';
     playerInput.setAttribute('readonly', true);
+    setTimeout(() => {
+        playerInput.setAttribute('readonly', 'true');
+        wordDisplay.innerText = '';
+        playerInput.value = 'Game Over';
+    }, 300);
     playerInput.style.backgroundColor = "#e6000090";
     playerInput.value = 'Game Over';
     scoreDisplay.innerText = `Final Score: ${score}`;
@@ -91,13 +98,16 @@ function gameOver() {
 
 function saveScore(score, percentage) {
     highScores.push(new Score(score, percentage));
+    highScores.sort((a, b) => b.hits - a.hits);
+    if (highScores.length > 9) {
+        highScores.pop();
+        log(highScores.length, 'this works');
+    }
     localStorage.setItem('HighScores', JSON.stringify(highScores));
-    log(highScores);
-    log(JSON.stringify(highScores));
-    log(JSON.parse(localStorage.getItem('HighScores')));
 }
 
 utils.listen('click', startBtn, () => {
+    highScoreBtn.classList.add('noclick');
     bgm.play();
     getTimer();
     playerInput.removeAttribute('readonly');
@@ -173,6 +183,7 @@ utils.listen('keydown', playerInput, function (event) {
 });
 
 utils.listen('click', restartBtn, () => {
+    highScoreBtn.classList.add('noclick');
     bgm.load();
     bgm.play();
     getTimer();
@@ -189,6 +200,16 @@ utils.listen('click', restartBtn, () => {
 
 utils.listen('click', highScoreBtn, () => {
     highscoreDialog.showModal();
+    leaderboard.innerHTML = '';
+    let count = 1;
+    highScores.forEach(score => {
+        const newHighScore = document.createElement('div');
+        newHighScore.innerHTML += `<p>#${count}</p>`;
+        newHighScore.innerHTML += `<p>${score.hits} words</p>`;
+        newHighScore.innerHTML += `<p>#${score.percentage}%</p>`;
+        leaderboard.appendChild(newHighScore);
+        count++;
+    });
 });
 
 utils.listen('click', close, () => {
