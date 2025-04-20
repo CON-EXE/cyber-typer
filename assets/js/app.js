@@ -10,7 +10,7 @@ let percentage = 0;
 let word = '';
 let shuffledWords = [];
 let timer;
-let highScores = [];
+let highScores = JSON.parse(localStorage.getItem("HighScores")) || [];
 
 import wordList from "./words.js";
 import * as utils from "./utils.js";
@@ -22,10 +22,13 @@ const incorrect = new Audio('./assets/media/incorrect.mp3')
 
 const startBtn = utils.select('.start');
 const restartBtn = utils.select('.restart');
+const highScoreBtn =utils.select('.highscores');
 const playerInput = utils.select('.input');
 const wordDisplay = utils.select('.word');
 const timeDisplay = utils.select('.time');
 const scoreDisplay = utils.select('.score');
+const highscoreDialog = utils.select('dialog');
+const close = utils.select('.close-dialog');
 
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
@@ -71,7 +74,6 @@ function getTimer() {
 function getPercentage(score, words) {
     let percentage = score / words;
     percentage = (percentage * 100).toFixed();
-    log(score, words, percentage);
     return percentage;
 }
 
@@ -85,13 +87,14 @@ function gameOver() {
     percentage = getPercentage(score, words); 
     saveScore(score, percentage);
     log('this works');
-    log(highScores);
 }
 
 function saveScore(score, percentage) {
-    log('save works');
-    const newScore = new Score(score, percentage);
-    highScores.push(newScore);
+    highScores.push(new Score(score, percentage));
+    localStorage.setItem('HighScores', JSON.stringify(highScores));
+    log(highScores);
+    log(JSON.stringify(highScores));
+    log(JSON.parse(localStorage.getItem('HighScores')));
 }
 
 utils.listen('click', startBtn, () => {
@@ -182,4 +185,12 @@ utils.listen('click', restartBtn, () => {
     playerInput.focus();
     shuffledWords = shuffle(wordList);
     getWord(shuffledWords);
+});
+
+utils.listen('click', highScoreBtn, () => {
+    highscoreDialog.showModal();
+});
+
+utils.listen('click', close, () => {
+    highscoreDialog.close();
 });
