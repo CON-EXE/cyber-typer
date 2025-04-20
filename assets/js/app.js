@@ -1,8 +1,6 @@
 'use strict';
 
-const { log } = console;
-
-let startTime = 10;
+let startTime = 60;
 let time = startTime;
 let score = 0;
 let words = 0;
@@ -93,7 +91,6 @@ function gameOver() {
     scoreDisplay.innerText = `Final Score: ${score}`;
     percentage = getPercentage(score, words); 
     saveScore(score, percentage);
-    log('this works');
 }
 
 function saveScore(score, percentage) {
@@ -101,7 +98,6 @@ function saveScore(score, percentage) {
     highScores.sort((a, b) => b.hits - a.hits);
     if (highScores.length > 9) {
         highScores.pop();
-        log(highScores.length, 'this works');
     }
     localStorage.setItem('HighScores', JSON.stringify(highScores));
 }
@@ -204,9 +200,9 @@ utils.listen('click', highScoreBtn, () => {
     let count = 1;
     highScores.forEach(score => {
         const newHighScore = document.createElement('div');
-        newHighScore.innerHTML += `<p>#${count}</p>`;
-        newHighScore.innerHTML += `<p>${score.hits} words</p>`;
-        newHighScore.innerHTML += `<p>#${score.percentage}%</p>`;
+        newHighScore.innerHTML += `<p class="score-num">#${count}</p>`;
+        newHighScore.innerHTML += `<p class="score-words">${score.hits} words</p>`;
+        newHighScore.innerHTML += `<p class="score-percent">${score.percentage}%</p>`;
         leaderboard.appendChild(newHighScore);
         count++;
     });

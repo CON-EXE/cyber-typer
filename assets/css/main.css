@@ -165,12 +165,20 @@ dialog {
 
     p {
         font-size: 24px;
-        width: 80px;
+        text-align: center;
     }
 
-    p + p {
-        width: 140px;
-        text-align: right;
+    .score-num {
+        width: 60px;
+    }
+
+    .score-words {
+        width: 240px;
+        text-align: center;
+    }
+
+    .score-percent {
+        width: 60px;
     }
 
     div {
